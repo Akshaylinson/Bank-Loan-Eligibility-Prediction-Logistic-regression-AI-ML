@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanEase | Smart Loan Eligibility Prediction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        .input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+        
+        .success-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .danger-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        }
+        
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+            background-size: 200% 100%;
+            animation: loading 2s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- Header -->
+    <header class="gradient-bg text-white">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-university text-2xl"></i>
+                    <h1 class="text-2xl font-bold">LoanEase</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="hover:text-blue-200 transition-colors">Home</a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">How It Works</a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">Loan Types</a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">FAQ</a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">Contact</a>
+                </nav>
+                <button class="bg-white text-primary px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors">
+                    Sign In
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16 md:py-24">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">Smart Loan Eligibility Prediction</h1>
+            <p class="text-xl md:text-2xl max-w-2xl mx-auto mb-10 text-blue-100 animate-fade-in">
+                Find out if you qualify for a bank loan in seconds with our AI-powered prediction tool
+            </p>
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6 animate-slide-up">
+                <button id="start-application" class="bg-accent text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-500 transition-colors flex items-center justify-center space-x-2">
+                    <span>Check Eligibility Now</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-colors">
+                    Learn More
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-dark mb-12">Why Use Our Prediction Tool?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-light p-6 rounded-xl card-shadow text-center transition-transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                        <i class="fas fa-bolt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Instant Results</h3>
+                    <p class="text-gray-600">Get your loan eligibility prediction in seconds with our advanced ML model.</p>
+                </div>
+                <div class="bg-light p-6 rounded-xl card-shadow text-center transition-transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Secure & Private</h3>
+                    <p class="text-gray-600">Your financial data is encrypted and never stored without your permission.</p>
+                </div>
+                <div class="bg-light p-6 rounded-xl card-shadow text-center transition-transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Accurate Predictions</h3>
+                    <p class="text-gray-600">Trained on thousands of data points for reliable eligibility assessment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form Section -->
+    <section id="application-section" class="py-16 bg-gray-50 hidden">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                <div class="gradient-bg text-white p-6">
+                    <h2 class="text-2xl font-bold">Loan Eligibility Application</h2>
+                    <p class="text-blue-100">Fill in your details to check if you qualify for a bank loan</p>
+                </div>
+                
+                <form id="loan-form" class="p-6 md:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Applicant Income -->
+                        <div>
+                            <label for="income" class="block text-sm font-medium text-gray-700 mb-1">Monthly Income ($)</label>
+                            <div class="relative">
+                                <input type="number" id="income" name="income" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all" 
+                                    placeholder="e.g. 5000" min="0">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <i class="fas fa-dollar-sign text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Credit Score -->
+                        <div>
+                            <label for="credit_score" class="block text-sm font-medium text-gray-700 mb-1">Credit Score</label>
+                            <div class="relative">
+                                <input type="number" id="credit_score" name="credit_score" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all" 
+                                    placeholder="300-850" min="300" max="850">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <i class="fas fa-credit-card text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loan Amount -->
+                        <div>
+                            <label for="loan_amount" class="block text-sm font-medium text-gray-700 mb-1">Loan Amount ($)</label>
+                            <div class="relative">
+                                <input type="number" id="loan_amount" name="loan_amount" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all" 
+                                    placeholder="e.g. 25000" min="0">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <i class="fas fa-hand-holding-usd text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loan Term -->
+                        <div>
+                            <label for="loan_term" class="block text-sm font-medium text-gray-700 mb-1">Loan Term (months)</label>
+                            <div class="relative">
+                                <select id="loan_term" name="loan_term" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all appearance-none">
+                                    <option value="">Select loan term</option>
+                                    <option value="12">12 months</option>
+                                    <option value="24">24 months</option>
+                                    <option value="36">36 months</option>
+                                    <option value="48">48 months</option>
+                                    <option value="60">60 months</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Age -->
+                        <div>
+                            <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                            <div class="relative">
+                                <input type="number" id="age" name="age" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all" 
+                                    placeholder="e.g. 35" min="18" max="100">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Employment Status -->
+                        <div>
+                            <label for="employment" class="block text-sm font-medium text-gray-700 mb-1">Employment Status</label>
+                            <div class="relative">
+                                <select id="employment" name="employment" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all appearance-none">
+                                    <option value="">Select employment status</option>
+                                    <option value="employed">Employed</option>
+                                    <option value="self_employed">Self-Employed</option>
+                                    <option value="unemployed">Unemployed</option>
+                                    <option value="student">Student</option>
+                                    <option value="retired">Retired</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="fas fa-briefcase text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <label for="loan_purpose" class="block text-sm font-medium text-gray-700 mb-1">Loan Purpose</label>
+                        <textarea id="loan_purpose" name="loan_purpose" rows="3" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all" 
+                            placeholder="Briefly describe what you need the loan for..."></textarea>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-center">
+                        <button type="submit" id="submit-btn" class="bg-primary text-white px-10 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 glow">
+                            <span>Check Eligibility</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Loading Bar -->
+                <div id="loading-bar" class="loading-bar hidden"></div>
+                
+                <!-- Results Section -->
+                <div id="results-section" class="p-6 md:p-8 hidden">
+                    <div class="text-center">
+                        <div id="result-icon" class="w-20 h-20 rounded-full flex items-center justify-center text-white text-4xl mx-auto mb-6"></div>
+                        <h3 id="result-title" class="text-2xl font-bold mb-2"></h3>
+                        <p id="result-message" class="text-gray-600 mb-6 max-w-md mx-auto"></p>
+                        
+                        <div class="bg-gray-100 p-6 rounded-xl mb-6">
+                            <h4 class="font-semibold text-lg mb-4">Your Application Details</h4>
+                            <div class="grid grid-cols-2 gap-4 text-left">
+                                <div>
+                                    <p class="text-gray-500 text-sm">Monthly Income</p>
+                                    <p id="display-income" class="font-medium"></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Credit Score</p>
+                                    <p id="display-credit" class="font-medium"></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Loan Amount</p>
+                                    <p id="display-amount" class="font-medium"></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Loan Term</p>
+                                    <p id="display-term" class="font-medium"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+                            <button id="new-application" class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                Start New Application
+                            </button>
+                            <button class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                                Download Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-dark mb-12">How It Works</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center mb-12">
+                    <div class="md:w-1/3 flex justify-center mb-6 md:mb-0">
+                        <div class="w-24 h-24 bg-primary rounded-full flex items-center justify-center text-white text-3xl">
+                            1
+                        </div>
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left">
+                        <h3 class="text-xl font-semibold mb-2">Enter Your Information</h3>
+                        <p class="text-gray-600">Provide your financial and personal details in our secure application form. We only ask for information relevant to loan eligibility assessment.</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center mb-12">
+                    <div class="md:w-1/3 flex justify-center mb-6 md:mb-0 order-2 md:order-1">
+                        <div class="w-24 h-24 bg-secondary rounded-full flex items-center justify-center text-white text-3xl">
+                            2
+                        </div>
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left order-1 md:order-2">
+                        <h3 class="text-xl font-semibold mb-2">AI-Powered Analysis</h3>
+                        <p class="text-gray-600">Our machine learning model analyzes your information against thousands of previous loan applications to predict your eligibility.</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/3 flex justify-center mb-6 md:mb-0">
+                        <div class="w-24 h-24 bg-accent rounded-full flex items-center justify-center text-white text-3xl">
+                            3
+                        </div>
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left">
+                        <h3 class="text-xl font-semibold mb-2">Get Your Results</h3>
+                        <p class="text-gray-600">Receive an instant prediction with detailed explanation. If eligible, you can proceed with a full application with our partner banks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <h2 class="text-3xl font-bold text-center text-dark mb-12">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-xl card-shadow overflow-hidden transition-all">
+                    <button class="faq-question w-full text-left p-6 font-medium text-lg flex justify-between items-center">
+                        <span>How accurate is the prediction?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-6 text-gray-600 hidden">
+                        Our machine learning model has been trained on thousands of loan applications and achieves over 92% accuracy in predicting loan eligibility. However, please note that this is a prediction tool and final approval is subject to the bank's verification process.
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl card-shadow overflow-hidden transition-all">
+                    <button class="faq-question w-full text-left p-6 font-medium text-lg flex justify-between items-center">
+                        <span>Is my personal information secure?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-6 text-gray-600 hidden">
+                        Yes, we take data security very seriously. All information you provide is encrypted and we do not store your personal data without your explicit permission. Our system is designed to comply with financial data protection regulations.
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl card-shadow overflow-hidden transition-all">
+                    <button class="faq-question w-full text-left p-6 font-medium text-lg flex justify-between items-center">
+                        <span>What factors affect loan eligibility?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-6 text-gray-600 hidden">
+                        The main factors include your income level, credit score, existing debts, employment status, loan amount, and loan term. Our model considers all these factors and their interactions to provide an accurate prediction.
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl card-shadow overflow-hidden transition-all">
+                    <button class="faq-question w-full text-left p-6 font-medium text-lg flex justify-between items-center">
+                        <span>Can I improve my chances of approval?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-6 text-gray-600 hidden">
+                        Yes, improving your credit score, reducing existing debt, increasing your income, or applying for a smaller loan amount can increase your chances of approval. Our tool can help you understand which factors are most important in your specific case.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-university text-2xl"></i>
+                        <h3 class="text-xl font-bold">LoanEase</h3>
+                    </div>
+                    <p class="text-gray-400">Making loan eligibility prediction simple, fast, and accurate with AI technology.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">How It Works</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Loan Types</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Disclaimer</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-envelope"></i>
+                            <span>support@loanease.com</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (800) 123-4567</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Finance St, New York, NY</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 LoanEase. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll to application section
+            document.getElementById('start-application').addEventListener('click', function() {
+                document.getElementById('application-section').classList.remove('hidden');
+                document.getElementById('application-section').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Form submission
+            document.getElementById('loan-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading bar
+                document.getElementById('loading-bar').classList.remove('hidden');
+                document.getElementById('submit-btn').disabled = true;
+                
+                // Simulate API call delay
+                setTimeout(function() {
+                    // Hide loading bar
+                    document.getElementById('loading-bar').classList.add('hidden');
+                    
+                    // Get form values
+                    const income = document.getElementById('income').value;
+                    const creditScore = document.getElementById('credit_score').value;
+                    const loanAmount = document.getElementById('loan_amount').value;
+                    const loanTerm = document.getElementById('loan_term').value;
+                    const age = document.getElementById('age').value;
+                    const employment = document.getElementById('employment').value;
+                    
+                    // Display values in results
+                    document.getElementById('display-income').textContent = '$' + income;
+                    document.getElementById('display-credit').textContent = creditScore;
+                    document.getElementById('display-amount').textContent = '$' + loanAmount;
+                    document.getElementById('display-term').textContent = loanTerm + ' months';
+                    
+                    // Simple eligibility logic (in a real app, this would be done by the ML model)
+                    let isEligible = false;
+                    let probability = 0;
+                    
+                    if (income >= 3000 && creditScore >= 650 && loanAmount <= income * 10) {
+                        isEligible = true;
+                        probability = 85;
+                    } else if (income >= 2000 && creditScore >= 600 && loanAmount <= income * 8) {
+                        isEligible = true;
+                        probability = 65;
+                    } else {
+                        isEligible = false;
+                        probability = 25;
+                    }
+                    
+                    // Adjust probability based on other factors
+                    if (employment === 'employed') probability += 10;
+                    if (employment === 'unemployed') probability -= 20;
+                    if (age >= 25 && age <= 55) probability += 5;
+                    
+                    // Ensure probability is between 0 and 100
+                    probability = Math.max(0, Math.min(100, probability));
+                    
+                    // Show results
+                    const resultIcon = document.getElementById('result-icon');
+                    const resultTitle = document.getElementById('result-title');
+                    const resultMessage = document.getElementById('result-message');
+                    
+                    if (isEligible && probability > 50) {
+                        resultIcon.className = 'w-20 h-20 rounded-full flex items-center justify-center text-white text-4xl mx-auto mb-6 success-gradient';
+                        resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                        resultTitle.textContent = 'Congratulations! You are likely eligible';
+                        resultTitle.className = 'text-2xl font-bold mb-2 text-green-600';
+                        resultMessage.textContent = `Based on your information, there is a ${probability}% chance your loan application will be approved. You can proceed with a full application.`;
+                    } else {
+                        resultIcon.className = 'w-20 h-20 rounded-full flex items-center justify-center text-white text-4xl mx-auto mb-6 danger-gradient';
+                        resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+                        resultTitle.textContent = 'Not Eligible at This Time';
+                        resultTitle.className = 'text-2xl font-bold mb-2 text-red-600';
+                        resultMessage.textContent = `Based on your information, there is only a ${probability}% chance your loan application would be approved. Consider improving your credit score or reducing the loan amount.`;
+                    }
+                    
+                    // Show results section
+                    document.getElementById('results-section').classList.remove('hidden');
+                    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    
+                    // Re-enable submit button
+                    document.getElementById('submit-btn').disabled = false;
+                }, 2000);
+            });
+            
+            // New application button
+            document.getElementById('new-application').addEventListener('click', function() {
+                document.getElementById('loan-form').reset();
+                document.getElementById('results-section').classList.add('hidden');
+                document.getElementById('application-section').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // FAQ accordion
+            document.querySelectorAll('.faq-question').forEach(button => {
+                button.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // Toggle answer visibility
+                    if (answer.classList.contains('hidden')) {
+                        answer.classList.remove('hidden');
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        answer.classList.add('hidden');
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
